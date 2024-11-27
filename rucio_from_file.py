@@ -39,7 +39,7 @@ def attach_datasets_to_rucio(dataset_id, files, rucio_client):
         scope=SCOPE,
         name=dataset_id,
         dids=dids,
-        rse="<RSE>",
+        rse=RSE,
     )
 
 
