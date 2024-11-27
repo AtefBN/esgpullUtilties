@@ -59,8 +59,7 @@ def main():
         print('Dataset has {} files attached.'.format(len(value)))
         print('----------------------------------------')
 
-
-
+    print('Done!')
 
 if __name__ == '__main__':
     main()
