@@ -1,4 +1,4 @@
-import rucio
+from rucio.client import Client
 import json
 
 
@@ -28,14 +28,14 @@ def get_dataset_list(file_path):
     return dataset_dict
 
 
-def attach_datasets_to_rucio(dataset_id, files):
-    dataset = rucio.add_dataset(scope=SCOPE, name=dataset_id, rse=RSE)
+def attach_datasets_to_rucio(dataset_id, files, rucio_client):
+    dataset = rucio_client.add_dataset(scope=SCOPE, name=dataset_id, rse=RSE)
     dids = []
     for file in files:
         file_dic = {'scope': SCOPE, 'name': file}
         dids.append(file_dic)
 
-    attachment = rucio.attach_dids(
+    attachment = rucio_client.attach_dids(
         scope=SCOPE,
         name=dataset_id,
         dids=dids,
@@ -50,10 +50,12 @@ def main():
     """
     print("Retrieving dataset/file dictionary...")
     dataset_dict = get_dataset_list('subset_rucio_cmcc.json')
+    print("Init rucio client...")
+    rucio_client = Client()
     print("Processing dictionary items...")
     for key in dataset_dict.keys():
         print('now attaching datasets from file {}...'.format(key))
-        attach_datasets_to_rucio(key, dataset_dict[key])
+        attach_datasets_to_rucio(key, dataset_dict[key], rucio_client)
         print('Dataset has {} files attached.'.format(len(dataset_dict[key])))
         print('----------------------------------------')
 
