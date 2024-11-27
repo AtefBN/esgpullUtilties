@@ -25,8 +25,6 @@ def get_dataset_list(file_path):
         else:
             files = [file_id]
         dataset_dict[dataset_id] = files
-
-    print(dataset_dict)
     return dataset_dict
 
 
@@ -53,10 +51,10 @@ def main():
     print("Retrieving dataset/file dictionary...")
     dataset_dict = get_dataset_list('subset_rucio_cmcc.json')
     print("Processing dictionary items...")
-    for key, value in dataset_dict:
+    for key in dataset_dict.keys():
         print('now attaching datasets from file {}...'.format(key))
-        attach_datasets_to_rucio(key, value)
-        print('Dataset has {} files attached.'.format(len(value)))
+        attach_datasets_to_rucio(key, dataset_dict[key])
+        print('Dataset has {} files attached.'.format(len(dataset_dict[key])))
         print('----------------------------------------')
 
     print('Done!')
