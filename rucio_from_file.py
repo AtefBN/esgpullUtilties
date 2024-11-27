@@ -1,4 +1,5 @@
 from rucio.client import Client
+from rucio.common.exception import DataIdentifierAlreadyExists
 import json
 
 
@@ -29,7 +30,10 @@ def get_dataset_list(file_path):
 
 
 def attach_datasets_to_rucio(dataset_id, files, rucio_client):
-    dataset = rucio_client.add_dataset(scope=SCOPE, name=dataset_id, rse=RSE)
+    try:
+        dataset = rucio_client.add_dataset(scope=SCOPE, name=dataset_id, rse=RSE)
+    except DataIdentifierAlreadyExists as e:
+        print('Dataset already exists, skipping...')
     dids = []
     for file in files:
         file_dic = {'scope': SCOPE, 'name': file}
