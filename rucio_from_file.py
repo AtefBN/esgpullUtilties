@@ -21,14 +21,18 @@ def get_dataset_list(file_path):
     dataset_dict = {}
     data = data['49d8b79df01e29fa065ce9d65211d03e98b19750']['files']
     for file in data:
+        file_rucio_dict = {}
         dataset_id = file['dataset_id']
-        # file_id = file['file_id']
-        # local_path = file['local_path']
+        file_id = file['file_id']
+        local_path = file['local_path']
+        file_rucio_dict['did_name'] = file_id
+        file_rucio_dict['path'] = os.path.join(constants.datapath_prefix, local_path)
+        file_rucio_dict['rse'] = RSE
         if dataset_id in dataset_dict.keys():
             files = dataset_dict[dataset_id]
-            files.append(file)
+            files.append(file_rucio_dict)
         else:
-            files = [file]
+            files = [file_rucio_dict]
         dataset_dict[dataset_id] = files
     return dataset_dict
 
@@ -39,6 +43,10 @@ def attach_datasets_to_rucio(dataset_id, files, rucio_client, upload_client):
         dataset = rucio_client.add_dataset(scope=SCOPE, name=dataset_id, rse=RSE)
     except DataIdentifierAlreadyExists as e:
         print('Dataset already exists, skipping...')
+
+    print('Uploading files to Rucio...')
+    upload_client.upload(files)
+
     # handling file list, uploading then creating dids to attach to dataset
     dids = []
     for file in files:
@@ -62,10 +70,7 @@ def attach_datasets_to_rucio(dataset_id, files, rucio_client, upload_client):
         # NotAllFilesUploaded
         # so catching one of the last two at the very least is necessary before continuing
 
-        # still need the file absolute path before trying to upload.
-        file_path = os.path.join(constants.datapath_prefix, file['local_path'])
-        upload_client(path=file_path, rse=RSE)
-        file_dic = {'scope': SCOPE, 'name': file['file_id']}
+        file_dic = {'scope': SCOPE, 'name': file['did_name']}
         dids.append(file_dic)
 
     attachment = rucio_client.attach_dids(
