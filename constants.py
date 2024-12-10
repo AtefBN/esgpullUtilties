@@ -8,7 +8,8 @@ pattern = ('%(mip_era)s.%(activity_id)s.%(institution_id)s.%(source_id)s.%(exper
 period_pattern = r"[a-zA-Z0-9]*_(\d{8})-(\d{8})"
 esgpull_json_file = "esgpull_catalogue.json"
 enesds_catalogue = "ENESDS_CMIP6_OCT24.csv"
-datapath_prefix = "/home/jovyan/data/"
+# datapath_prefix = "/home/jovyan/data/"
+datapath_prefix = "/pv/jhub-claim-data-pvc-3f444961-9c92-4c9b-93d1-3d3005804576"
 
 RSE = "DESY-DCACHE"
 SCOPE = "abennasser"
