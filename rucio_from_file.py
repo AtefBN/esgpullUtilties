@@ -26,7 +26,7 @@ def get_dataset_list(file_path):
         file_id = file['file_id']
         file_name = file['filename']
         local_path = file['local_path']
-        file_rucio_dict['did_name'] = file_id
+        # file_rucio_dict['did_name'] = file_id
         file_rucio_dict['path'] = os.path.join(constants.datapath_prefix, local_path, file_name)
         file_rucio_dict['rse'] = RSE
         if dataset_id in dataset_dict.keys():
