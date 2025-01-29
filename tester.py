@@ -1,8 +1,9 @@
-from rucio.client import Client
+from rucio.client import Client, uploadclient
 from constants import *
 import os
 # Initialize the Rucio client
 client = Client()
+uploadclient = uploadclient.UploadClient()
 
 # Define RSE (storage element), dataset, and file details
 rse =  RSE # Replace with your RSE

@@ -95,10 +95,8 @@ def main():
     print("Retrieving dataset/file dictionary...")
     dataset_dict = get_dataset_list('subset_rucio_cmcc.json')
     print("Init rucio client...")
-    #rucio_client = Client()
-    rucio_client = None
-    #upload_client = UploadClient()
-    upload_client = None
+    rucio_client = Client()
+    upload_client = UploadClient()
     print("Processing dictionary items...")
     for key in dataset_dict.keys():
         print('now attaching files from dataset {}...'.format(key))
