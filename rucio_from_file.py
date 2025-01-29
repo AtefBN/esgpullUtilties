@@ -19,16 +19,21 @@ def get_dataset_list(file_path):
         data = json.load(file)
 
     dataset_dict = {}
+    # Unpacking the file list from esgpull db dictionary
     data = data['49d8b79df01e29fa065ce9d65211d03e98b19750']['files']
     for file in data:
+        # extracting file metadata from file dict
         file_rucio_dict = {}
         dataset_id = file['dataset_id']
         file_id = file['file_id']
         file_name = file['filename']
         local_path = file['local_path']
-        # file_rucio_dict['did_name'] = file_id
+
+        # building the rucio specific file dictionary
         file_rucio_dict['path'] = os.path.join(constants.datapath_prefix, local_path, file_name)
         file_rucio_dict['rse'] = RSE
+        file_rucio_dict['scope'] = SCOPE
+        file_rucio_dict['did_name'] = file_name
         if dataset_id in dataset_dict.keys():
             files = dataset_dict[dataset_id]
             files.append(file_rucio_dict)
@@ -42,12 +47,12 @@ def attach_datasets_to_rucio(dataset_id, files, rucio_client, upload_client):
 
     try:
         dataset = rucio_client.add_dataset(scope=SCOPE, name=dataset_id, rse=RSE)
+        print("dataset {}:{} created".format(SCOPE, dataset_id))
     except DataIdentifierAlreadyExists as e:
         print('Dataset already exists, skipping...')
 
     print('Uploading files to Rucio...')
     upload_client.upload(files)
-
     # handling file list, uploading then creating dids to attach to dataset
     dids = []
     for file in files:
@@ -90,8 +95,10 @@ def main():
     print("Retrieving dataset/file dictionary...")
     dataset_dict = get_dataset_list('subset_rucio_cmcc.json')
     print("Init rucio client...")
-    rucio_client = Client()
-    upload_client = UploadClient()
+    #rucio_client = Client()
+    rucio_client = None
+    #upload_client = UploadClient()
+    upload_client = None
     print("Processing dictionary items...")
     for key in dataset_dict.keys():
         print('now attaching files from dataset {}...'.format(key))
