@@ -31,7 +31,7 @@ files = [
 ]
 
 try:
-    client.upload(files)
+    uploadclient.upload(files)
     print(f"File {file_name} uploaded successfully to {rse}.")
 except Exception as e:
     print(f"Upload failed: {e}")
