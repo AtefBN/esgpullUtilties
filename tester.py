@@ -38,7 +38,8 @@ except Exception as e:
 
 # Attach file to dataset
 try:
-    client.add_files_to_dataset(scope, dataset, files)
+    # client.add_files_to_dataset(scope, dataset, files)
+    client.add_files_to_dataset(scope, dataset, [{"scope": scope, "name": file_name}])
     print(f"File {file_name} added to dataset {did}.")
 except Exception as e:
     print(f"Failed to attach file to dataset: {e}")
