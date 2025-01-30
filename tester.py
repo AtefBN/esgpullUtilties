@@ -9,8 +9,9 @@ uploadclient = uploadclient.UploadClient()
 rse =  RSE # Replace with your RSE
 dataset = "CMIP6.ScenarioMIP.CMCC.CMCC-ESM2.ssp585.r1i1p1f1.day.hur.gn.v20210126"  # Existing dataset or new one
 scope = SCOPE  # Rucio scope
-file_path = os.path.join("/pv/jhub-claim-data-pvc-3f444961-9c92-4c9b-93d1-3d3005804576/CMIP6/ScenarioMIP/CMCC/CMCC-ESM2/ssp585/r1i1p1f1/day/hur/gn/v20210126")  # Path to the file
+file_path = "/pv/jhub-claim-data-pvc-3f444961-9c92-4c9b-93d1-3d3005804576/CMIP6/ScenarioMIP/CMCC/CMCC-ESM2/ssp585/r1i1p1f1/day/hur/gn/v20210126"
 file_name = "hur_day_CMCC-ESM2_ssp585_r1i1p1f1_gn_20550101-20561231.nc"  # Name of the file
+full_path = os.path.join(file_path, file_name)
 did = f"{scope}:{dataset}"
 
 # Create a dataset (if it doesn't exist)
@@ -23,9 +24,9 @@ except Exception as e:
 # Upload file to Rucio
 files = [
     {
-        "scope": scope,
-        "name": file_name,
-        "path": file_path,
+        "did_scope": scope,
+        "did_name": file_name,
+        "path": full_path,
         "rse": rse
     }
 ]
