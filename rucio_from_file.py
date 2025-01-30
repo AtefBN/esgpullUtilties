@@ -51,12 +51,12 @@ def attach_datasets_to_rucio(dataset_id, files, rucio_client, upload_client):
     except DataIdentifierAlreadyExists as e:
         print('Dataset already exists, skipping...')
 
-    print('Uploading files to Rucio...')
-    upload_client.upload(files)
+    # print('Uploading files to Rucio...')
+    # upload_client.upload(files)
     # handling file list, uploading then creating dids to attach to dataset
     dids = []
     for file in files:
-
+        print('Now uploading file {}'.format(file['did_name']))
         # these lines are commented because they call subprocess instead of rucio python api.
 
         # try:
@@ -75,7 +75,7 @@ def attach_datasets_to_rucio(dataset_id, files, rucio_client, upload_client):
         # NoFilesUploaded
         # NotAllFilesUploaded
         # so catching one of the last two at the very least is necessary before continuing
-
+        upload_client.upload([file])
         file_dic = {'scope': SCOPE, 'name': file['did_name']}
         dids.append(file_dic)
 
