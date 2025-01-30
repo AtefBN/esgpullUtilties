@@ -32,7 +32,7 @@ def get_dataset_list(file_path):
         # building the rucio specific file dictionary
         file_rucio_dict['path'] = os.path.join(constants.datapath_prefix, local_path, file_name)
         file_rucio_dict['rse'] = RSE
-        file_rucio_dict['scope'] = SCOPE
+        file_rucio_dict['did_scope'] = SCOPE
         file_rucio_dict['did_name'] = file_name
         if dataset_id in dataset_dict.keys():
             files = dataset_dict[dataset_id]
