@@ -75,7 +75,10 @@ def attach_datasets_to_rucio(dataset_id, files, rucio_client, upload_client):
         # NoFilesUploaded
         # NotAllFilesUploaded
         # so catching one of the last two at the very least is necessary before continuing
-        upload_client.upload([file])
+        try:
+            upload_client.upload([file])
+        except Exception as e:
+            pass
         file_dic = {'scope': SCOPE, 'name': file['did_name']}
         dids.append(file_dic)
 
