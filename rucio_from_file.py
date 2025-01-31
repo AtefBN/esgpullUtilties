@@ -80,14 +80,20 @@ def attach_datasets_to_rucio(dataset_id, files, rucio_client, upload_client):
         except Exception as e:
             pass
         file_dic = {'scope': SCOPE, 'name': file['did_name']}
+        rucio_client.attach_dids(
+            scope=SCOPE,
+            name=dataset_id,
+            dids=[file_dic],
+            rse=RSE
+        )
         dids.append(file_dic)
 
-    attachment = rucio_client.attach_dids(
-        scope=SCOPE,
-        name=dataset_id,
-        dids=dids,
-        rse=RSE,
-    )
+    #attachment = rucio_client.attach_dids(
+    #    scope=SCOPE,
+    #    name=dataset_id,
+    #    dids=dids,
+    #    rse=RSE,
+    #)
 
 
 def main():
