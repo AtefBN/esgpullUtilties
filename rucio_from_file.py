@@ -88,7 +88,7 @@ def attach_datasets_to_rucio(dataset_id, files, rucio_client, upload_client):
                 rse=RSE
             )
         except Exception as e:
-            print(e.message)
+            print('Error uploading file {}, already exists probably'.format(file['did_name']))
             pass
         dids.append(file_dic)
 
