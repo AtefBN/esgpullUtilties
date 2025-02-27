@@ -17,6 +17,8 @@ def get_dataset_list(file_path):
     """
     with open(file_path, 'r') as file:
         data = json.load(file)
+    with open("failed.txt", "r", encoding="utf-8") as file:
+        failed_list = [line.strip() for line in file]
 
     dataset_dict = {}
     # Unpacking the file list from esgpull db dictionary
@@ -28,20 +30,23 @@ def get_dataset_list(file_path):
         file_id = file['file_id']
         file_name = file['filename']
         local_path = file['local_path']
-
-        # building the rucio specific file dictionary
-        file_rucio_dict['path'] = os.path.join(constants.datapath_prefix, local_path, file_name)
-        file_rucio_dict['rse'] = RSE
-        file_rucio_dict['did_scope'] = SCOPE
-        file_rucio_dict['did_name'] = file_name
-        if dataset_id in dataset_dict.keys():
-            files = dataset_dict[dataset_id]
-            files.append(file_rucio_dict)
-        else:
-            files = [file_rucio_dict]
-        dataset_dict[dataset_id] = files
+        # working on only the failed files.
+        if file_name in failed_list:
+            # building the rucio specific file dictionary
+            file_rucio_dict['path'] = os.path.join(constants.datapath_prefix, local_path, file_name)
+            file_rucio_dict['rse'] = RSE
+            file_rucio_dict['did_scope'] = SCOPE
+            file_rucio_dict['did_name'] = file_name
+            if dataset_id in dataset_dict.keys():
+                files = dataset_dict[dataset_id]
+                files.append(file_rucio_dict)
+            else:
+                files = [file_rucio_dict]
+            dataset_dict[dataset_id] = files
     return dataset_dict
 
+def count_datasets(dset_dic):
+    return len(dset_dic.keys())
 
 def attach_datasets_to_rucio(dataset_id, files, rucio_client, upload_client):
 
@@ -75,12 +80,10 @@ def attach_datasets_to_rucio(dataset_id, files, rucio_client, upload_client):
         # NoFilesUploaded
         # NotAllFilesUploaded
         # so catching one of the last two at the very least is necessary before continuing
+        file_dic = {'scope': SCOPE, 'name': file['did_name']}
+
         try:
             upload_client.upload([file])
-        except Exception as e:
-            pass
-        file_dic = {'scope': SCOPE, 'name': file['did_name']}
-        try:
             rucio_client.attach_dids(
                 scope=SCOPE,
                 name=dataset_id,
@@ -88,16 +91,10 @@ def attach_datasets_to_rucio(dataset_id, files, rucio_client, upload_client):
                 rse=RSE
             )
         except Exception as e:
-            print('Error uploading file {}, already exists probably'.format(file['did_name']))
+            print(f'Error uploading file %s: %s' % (file['did_name'], e))
+
             pass
         dids.append(file_dic)
-
-    #attachment = rucio_client.attach_dids(
-    #    scope=SCOPE,
-    #    name=dataset_id,
-    #    dids=dids,
-    #    rse=RSE,
-    #)
 
 
 def main():
@@ -107,6 +104,8 @@ def main():
     """
     print("Retrieving dataset/file dictionary...")
     dataset_dict = get_dataset_list('subset_rucio_cmcc.json')
+    print('Processing {} datasets.'.format(count_datasets(dataset_dict)))
+    """
     print("Init rucio client...")
     rucio_client = Client()
     upload_client = UploadClient()
@@ -116,7 +115,7 @@ def main():
         attach_datasets_to_rucio(key, dataset_dict[key], rucio_client, upload_client)
         print('Dataset has {} files attached.'.format(len(dataset_dict[key])))
         print('----------------------------------------')
-
+    """
     print('Done!')
 
 if __name__ == '__main__':
