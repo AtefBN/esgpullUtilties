@@ -19,7 +19,6 @@ def get_dataset_list(file_path):
         data = json.load(file)
     with open("failed.txt", "r", encoding="utf-8") as file:
         failed_list = [line.strip() for line in file]
-    print(failed_list)
     dataset_dict = {}
     # Unpacking the file list from esgpull db dictionary
     data = data['49d8b79df01e29fa065ce9d65211d03e98b19750']['files']
@@ -37,6 +36,7 @@ def get_dataset_list(file_path):
             file_rucio_dict['rse'] = RSE
             file_rucio_dict['did_scope'] = SCOPE
             file_rucio_dict['did_name'] = file_name
+            file_rucio_dict['filename'] = file_name
             if dataset_id in dataset_dict.keys():
                 files = dataset_dict[dataset_id]
                 files.append(file_rucio_dict)
