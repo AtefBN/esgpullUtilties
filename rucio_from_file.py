@@ -19,7 +19,7 @@ def get_dataset_list(file_path):
         data = json.load(file)
     with open("failed.txt", "r", encoding="utf-8") as file:
         failed_list = [line.strip() for line in file]
-
+    print(failed_list)
     dataset_dict = {}
     # Unpacking the file list from esgpull db dictionary
     data = data['49d8b79df01e29fa065ce9d65211d03e98b19750']['files']
@@ -83,6 +83,7 @@ def attach_datasets_to_rucio(dataset_id, files, rucio_client, upload_client):
         file_dic = {'scope': SCOPE, 'name': file['did_name']}
 
         try:
+            print("Uploading file {}".format(file['filename']))
             upload_client.upload([file])
             rucio_client.attach_dids(
                 scope=SCOPE,
@@ -105,7 +106,6 @@ def main():
     print("Retrieving dataset/file dictionary...")
     dataset_dict = get_dataset_list('subset_rucio_cmcc.json')
     print('Processing {} datasets.'.format(count_datasets(dataset_dict)))
-    """
     print("Init rucio client...")
     rucio_client = Client()
     upload_client = UploadClient()
@@ -115,7 +115,6 @@ def main():
         attach_datasets_to_rucio(key, dataset_dict[key], rucio_client, upload_client)
         print('Dataset has {} files attached.'.format(len(dataset_dict[key])))
         print('----------------------------------------')
-    """
     print('Done!')
 
 if __name__ == '__main__':
