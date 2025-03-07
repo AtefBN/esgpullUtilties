@@ -116,12 +116,12 @@ def main():
         if rule["state"] == "REPLICATING":
             print(rule["scope"], rule["name"])
 
-    """print("Processing dictionary items...")
+    print("Processing dictionary items...")
     for key in dataset_dict.keys():
         print('now attaching files from dataset {}...'.format(key))
         attach_datasets_to_rucio(key, dataset_dict[key], rucio_client, upload_client)
         print('Dataset has {} files attached.'.format(len(dataset_dict[key])))
-        print('----------------------------------------')"""
+        print('----------------------------------------')
     print('Done!')
 
 if __name__ == '__main__':
