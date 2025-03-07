@@ -111,18 +111,19 @@ def main():
     rucio_client = Client()
     upload_client = UploadClient()
     rucio_ruleclient = ruleclient.RuleClient()
-    list_of_rules = rucio_ruleclient.list_replication_rules(filters={'account': 'abennasser'})
+
+    """list_of_rules = rucio_ruleclient.list_replication_rules(filters={'account': 'abennasser'})
     for rule in list_of_rules:
         if rule["state"] == "REPLICATING":
-            print(rule["scope"], rule["name"])
+            print(rule["scope"], rule["name"])"""
 
-    """print("Processing dictionary items...")
+    print("Processing dictionary items...")
     for key in dataset_dict.keys():
         print('now attaching files from dataset {}...'.format(key))
         attach_datasets_to_rucio(key, dataset_dict[key], rucio_client, upload_client)
         print('Dataset has {} files attached.'.format(len(dataset_dict[key])))
         print('----------------------------------------')
-    print('Done!')"""
+    print('Done!')
 
 if __name__ == '__main__':
     main()
