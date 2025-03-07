@@ -1,7 +1,8 @@
 import rucio.client
-from rucio.client import Client, uploadclient
+from rucio.client import Client, uploadclient, ruleclient
 from rucio.client.uploadclient import UploadClient
 from rucio.common.exception import DataIdentifierAlreadyExists
+
 import json, os
 
 
@@ -109,8 +110,9 @@ def main():
     print("Init rucio client...")
     rucio_client = Client()
     upload_client = UploadClient()
-
-    list_of_rules = rucio.list_replication_rules(filters={'account': 'abennasser'})
+    rucio_ruleclient = ruleclient.RuleClient()
+    scope = SCOPE
+    list_of_rules = rucio_ruleclient.list_replication_rules(filters={'account': 'abennasser'})
     for rule in list_of_rules:
         if rule["state"] == "REPLICATING":
             print(rule["scope"], rule["name"])
