@@ -11,5 +11,6 @@ enesds_catalogue = "ENESDS_CMIP6_OCT24.csv"
 # datapath_prefix = "/home/jovyan/data/"
 datapath_prefix = "/pv/jhub-claim-data-pvc-3f444961-9c92-4c9b-93d1-3d3005804576"
 
-RSE = "VEGA-DCACHE"
+# RSE = "VEGA-DCACHE"
+RSE = "DESY-DCACHE"
 SCOPE = "abennasser"

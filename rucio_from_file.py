@@ -110,9 +110,9 @@ def main():
     print("Init rucio client...")
     rucio_client = Client()
     upload_client = UploadClient()
-    rucio_ruleclient = ruleclient.RuleClient()
+    """rucio_ruleclient = ruleclient.RuleClient()
 
-    """list_of_rules = rucio_ruleclient.list_replication_rules(filters={'account': 'abennasser'})
+    list_of_rules = rucio_ruleclient.list_replication_rules(filters={'account': 'abennasser'})
     for rule in list_of_rules:
         if rule["state"] == "REPLICATING":
             print(rule["scope"], rule["name"])"""
