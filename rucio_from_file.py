@@ -22,7 +22,7 @@ def get_dataset_list(file_path):
         failed_list = [line.strip() for line in file]
     dataset_dict = {}
     # Unpacking the file list from esgpull db dictionary
-    data = data['49d8b79df01e29fa065ce9d65211d03e98b19750']['files']
+    data = data['327b8449c62e7d5d204147ad0d0f379c8eab0064']['files']
     for file in data:
         # extracting file metadata from file dict
         file_rucio_dict = {}
@@ -105,17 +105,17 @@ def main():
     Every item in the list will then be attached to the rucio instance.
     """
     print("Retrieving dataset/file dictionary...")
-    dataset_dict = get_dataset_list('subset_rucio_cmcc.json')
+    dataset_dict = get_dataset_list('subset.json')
     print('Processing {} datasets.'.format(count_datasets(dataset_dict)))
     print("Init rucio client...")
     rucio_client = Client()
     upload_client = UploadClient()
-    """rucio_ruleclient = ruleclient.RuleClient()
+    rucio_ruleclient = ruleclient.RuleClient()
 
     list_of_rules = rucio_ruleclient.list_replication_rules(filters={'account': 'abennasser'})
     for rule in list_of_rules:
         if rule["state"] == "REPLICATING":
-            print(rule["scope"], rule["name"])"""
+            print(rule["scope"], rule["name"])
 
     print("Processing dictionary items...")
     for key in dataset_dict.keys():
